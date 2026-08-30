@@ -2,16 +2,59 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sudoku Game</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <h1>Sudoku Game</h1>
-  <div id="sudoku-board"></div>
-  <div class="controls">
-    <button id="new-game">New Game</button>
-    <button id="check-solution">Check Solution</button>
-    <span id="message"></span>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="title-group">
+        <h1>Sudoku</h1>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">Light mode</button>
+    </header>
+
+    <div class="toolbar">
+      <div class="difficulty-wrap">
+        <label for="difficulty-select">Difficulty:</label>
+        <select id="difficulty-select">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+      <div class="action-buttons">
+        <button id="new-game">New Game</button>
+        <button id="check-puzzle">Check</button>
+        <button id="hint-button">Hint</button>
+      </div>
+      <div class="timer-wrap">
+        <span id="timer">Time: 00:00</span>
+      </div>
+    </div>
+
+    <div id="sudoku-board"></div>
+    <div class="message-row">
+      <span id="message"></span>
+    </div>
+
+    <div id="completion-modal" class="completion-modal hidden" role="dialog" aria-modal="true" aria-labelledby="completion-title">
+      <div class="completion-dialog">
+        <h2 id="completion-title">Puzzle Complete</h2>
+        <p id="completion-text"></p>
+        <label for="player-name">Your name</label>
+        <input id="player-name" type="text" maxlength="20" placeholder="Player" />
+        <div class="completion-actions">
+          <button id="save-score" type="button">Save Score</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="leaderboard-panel" aria-live="polite">
+      <h2>Top 10</h2>
+      <ol id="leaderboard-list" class="leaderboard-list"></ol>
+    </section>
   </div>
   <script src="/static/main.js"></script>
 </body>
