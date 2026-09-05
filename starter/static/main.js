@@ -5,7 +5,6 @@ let puzzle = [];
 let timerStart = null;
 let timerInterval = null;
 let hintsUsed = 0;
-let incorrectHighlightTimeout = null;
 let statusMessageTimeout = null;
 const hintPalette = new Map();
 
@@ -150,6 +149,7 @@ function createBoardElement() {
       input.addEventListener('input', (e) => {
         const val = e.target.value.replace(/[^1-9]/g, '');
         e.target.value = val;
+        e.target.classList.remove('incorrect');
         updateInvalidCellStyles();
       });
       rowDiv.appendChild(input);
@@ -284,10 +284,6 @@ function closeCompletionModal() {
 async function newGame() {
   hintsUsed = 0;
   closeCompletionModal();
-  if (incorrectHighlightTimeout) {
-    clearTimeout(incorrectHighlightTimeout);
-    incorrectHighlightTimeout = null;
-  }
   clearIncorrectHighlights();
   const difficulty = document.getElementById('difficulty-select').value;
   const res = await fetch(`/new?difficulty=${encodeURIComponent(difficulty)}`);
@@ -344,13 +340,6 @@ async function checkSolution() {
     return;
   } else {
     showStatusMessage(`Some cells are incorrect. Time: ${formatTime(data.elapsed_seconds)}.`, '#d32f2f', 3000);
-    if (incorrectHighlightTimeout) {
-      clearTimeout(incorrectHighlightTimeout);
-    }
-    incorrectHighlightTimeout = setTimeout(() => {
-      clearIncorrectHighlights();
-      incorrectHighlightTimeout = null;
-    }, 3000);
   }
 }
 
