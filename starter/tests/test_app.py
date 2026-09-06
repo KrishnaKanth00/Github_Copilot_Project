@@ -49,6 +49,18 @@ def test_check_solution_reports_incorrect_cells(client):
     assert [0, 0] in payload["incorrect"]
 
 
+def test_check_solution_reports_all_incorrect_cells(client):
+    client.get("/new?clues=35")
+    board = deepcopy(CURRENT["solution"])
+    board[0][0] = (board[0][0] % 9) + 1
+    board[4][7] = (board[4][7] % 9) + 1
+
+    response = client.post("/check", json={"board": board})
+
+    assert response.status_code == 200
+    assert response.get_json()["incorrect"] == [[0, 0], [4, 7]]
+
+
 def test_check_solution_flags_empty_cells_as_incorrect(client):
     client.get("/new?clues=35")
     board = deepcopy(CURRENT["solution"])

@@ -315,20 +315,20 @@ async function checkSolution() {
     showStatusMessage(data.error, '#d32f2f', 3000);
     return;
   }
-  const incorrect = new Set(data.incorrect.map(([row, col]) => `${row},${col}`));
-  for (let idx = 0; idx < inputs.length; idx++) {
-    const inp = inputs[idx];
-    if (inp.disabled) continue;
-    inp.className = 'sudoku-cell';
-    inp.style.backgroundColor = '';
-    const cellKey = `${inp.dataset.row},${inp.dataset.col}`;
-    if (incorrect.has(cellKey)) {
-      inp.className = 'sudoku-cell incorrect';
+  for (const input of inputs) {
+    if (!input.disabled) {
+      input.classList.remove('incorrect');
     }
   }
 
-  const hasEmptyCell = Array.from(inputs).some((inp) => !inp.disabled && inp.value === '');
-  if (incorrect.size === 0 && !hasEmptyCell) {
+  for (const [row, col] of data.incorrect) {
+    const input = boardDiv.querySelector(`input[data-row="${row}"][data-col="${col}"]`);
+    if (input && !input.disabled) {
+      input.classList.add('incorrect');
+    }
+  }
+
+  if (data.incorrect.length === 0) {
     const completionTime = Math.max(0, Math.round(data.elapsed_seconds));
     const hintText = hintsUsed === 1 ? 'hint' : 'hints';
     const completionMessage = `Congratulations! You solved it in ${formatTime(data.elapsed_seconds)} with ${hintsUsed} ${hintText}.`;

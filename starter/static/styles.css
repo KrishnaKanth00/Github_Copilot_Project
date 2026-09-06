@@ -176,7 +176,7 @@ h1 {
 }
 
 .sudoku-cell.incorrect {
-    background: var(--invalid);
+    background: var(--invalid) !important;
     color: var(--text);
 }
 
