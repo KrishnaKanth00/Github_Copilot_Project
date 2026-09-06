@@ -315,13 +315,14 @@ async function checkSolution() {
     showStatusMessage(data.error, '#d32f2f', 3000);
     return;
   }
-  const incorrect = new Set(data.incorrect.map(x => x[0]*SIZE + x[1]));
+  const incorrect = new Set(data.incorrect.map(([row, col]) => `${row},${col}`));
   for (let idx = 0; idx < inputs.length; idx++) {
     const inp = inputs[idx];
     if (inp.disabled) continue;
     inp.className = 'sudoku-cell';
     inp.style.backgroundColor = '';
-    if (incorrect.has(idx)) {
+    const cellKey = `${inp.dataset.row},${inp.dataset.col}`;
+    if (incorrect.has(cellKey)) {
       inp.className = 'sudoku-cell incorrect';
     }
   }
